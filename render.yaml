@@ -1,7 +1,7 @@
 services:
   - type: web
     name: caja-puerto-quito
-    runtime: java
+    env: java
     plan: free
     region: oregon
     buildCommand: chmod +x mvnw && ./mvnw clean package -DskipTests
