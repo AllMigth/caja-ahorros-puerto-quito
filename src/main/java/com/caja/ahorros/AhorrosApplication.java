@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class AhorrosApplication {
 
 	public static void main(String[] args) {
+		System.out.println("DB_URL: " + System.getenv("DATABASE_URL"));
 		SpringApplication.run(AhorrosApplication.class, args);
 	}
 
