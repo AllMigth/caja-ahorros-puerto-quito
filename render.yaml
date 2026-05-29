@@ -1,5 +1,5 @@
 services:
-    - type: web
+  - type: web
     name: caja-puerto-quito
     runtime: java
     plan: free
@@ -7,7 +7,7 @@ services:
     buildCommand: chmod +x mvnw && ./mvnw clean package -DskipTests
     startCommand: java -jar target/*.jar --spring.profiles.active=prod
     envVars:
-            - key: JAVA_VERSION
+      - key: JAVA_VERSION
         value: 17
-            - key: SPRING_PROFILES_ACTIVE
+      - key: SPRING_PROFILES_ACTIVE
         value: prod
