@@ -22,5 +22,7 @@ public interface PrestamoRepository extends JpaRepository<Prestamo, Long> {
     @Query("SELECT COUNT(p) FROM Prestamo p " +
         "WHERE p.socio.id = :socioId AND p.estado = 'APROBADO'")
     Integer countPrestamosActivosPorSocio(@Param("socioId") Long socioId);
+    
+    Optional<Prestamo> findBySocioAndEstado(Socio socio, Prestamo.EstadoPrestamo estado);
 
 }

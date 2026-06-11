@@ -23,6 +23,19 @@ public class SocioController {
     @Autowired
     private PrestamoRepository prestamoRepository;
 
+    @Autowired
+    private SocioPublicService socioPublicService;
+
+    @GetMapping("/api/socios/buscar")
+    public List<Socio> buscarPorNombre(@RequestParam String q) {
+        return socioPublicService.buscarSociosPorNombre(q);
+    }
+
+    @GetMapping("/api/socios/{cedula}/link")
+    public String generarLinkSocio(@PathVariable String cedula) {
+        return "https://caja-ahorros-puerto-quito.onrender.com/s/" + cedula;
+    }
+
     // GET /socios
     @GetMapping
     public List<Socio> listarSocios() {

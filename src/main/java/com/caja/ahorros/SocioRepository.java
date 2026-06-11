@@ -1,6 +1,7 @@
 package com.caja.ahorros;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
@@ -12,4 +13,8 @@ public interface SocioRepository extends JpaRepository<Socio, Long> {
     
     // Verifica si ya existe esa cédula
     boolean existsByCedula(String cedula);
+
+    // NUEVO: Busca por nombre o apellido, sin importar mayúsculas
+    @Query("SELECT s FROM Socio s WHERE LOWER(CONCAT(s.nombres, ' ', s.apellidos)) LIKE LOWER(CONCAT('%', :nombre, '%'))")
+    List<Socio> buscarPorNombre(String nombre);
 }

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Estado - Caja de Ahorros</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f0f2f5; 
+            padding: 15px;
+        }
+        .card { 
+            background: white; 
+            border-radius: 12px; 
+            padding: 20px; 
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { font-size: 20px; color: #1a73e8; margin-bottom: 5px; }
+        .header p { color: #5f6368; font-size: 14px; }
+        .saldo { 
+            text-align: center; 
+            padding: 25px 0;
+            background: linear-gradient(135deg, #1a73e8 0%, #4285f4 100%);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        .saldo-label { font-size: 14px; opacity: 0.9; }
+        .saldo-monto { font-size: 36px; font-weight: bold; margin: 10px 0; }
+        .info-row { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 12px 0;
+            border-bottom: 1px solid #e8eaed;
+        }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: #5f6368; font-size: 14px; }
+        .info-value { color: #202124; font-weight: 500; font-size: 14px; }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .badge-success { background: #e6f4ea; color: #1e8e3e; }
+        .badge-warning { background: #fef7e0; color: #f9ab00; }
+        table { width: 100%; font-size: 13px; }
+        table td { padding: 8px 0; border-bottom: 1px solid #e8eaed; }
+        .footer { text-align: center; color: #5f6368; font-size: 12px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>💰 Caja de Ahorros</h1>
+        <p>Puerto Quito</p>
+    </div>
+
+    <div class="saldo">
+        <div class="saldo-label">Saldo de Ahorros</div>
+        <div class="saldo-monto" th:text="'$' + ${#numbers.formatDecimal(estado.saldoAhorros, 1, 2)}">$0.00</div>
+        <div class="saldo-label" th:text="${estado.nombre}">Nombre Socio</div>
+    </div>
+
+    <div class="card" th:if="${estado.prestamoActivo != null}">
+        <h3 style="margin-bottom: 15px; font-size: 16px;">Préstamo Activo</h3>
+        <div class="info-row">
+            <span class="info-label">Monto Original</span>
+            <span class="info-value" th:text="'$' + ${#numbers.formatDecimal(estado.prestamoActivo.montoOriginal, 1, 2)}">$0.00</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Saldo Pendiente</span>
+            <span class="info-value" th:text="'$' + ${#numbers.formatDecimal(estado.prestamoActivo.saldoPendiente, 1, 2)}">$0.00</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Cuotas</span>
+            <span class="info-value" th:text="${estado.prestamoActivo.cuotasPagadas} + ' / ' + ${estado.prestamoActivo.cuotasTotales}">0 / 48</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Próximo Pago</span>
+            <span class="info-value">
+                <span class="badge badge-warning" th:text="${estado.prestamoActivo.fechaProximoPago}">10 Nov 2026</span>
+            </span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Valor Cuota</span>
+            <span class="info-value" th:text="'$' + ${#numbers.formatDecimal(estado.prestamoActivo.valorCuotaActual, 1, 2)}">$0.00</span>
+        </div>
+    </div>
+
+    <div class="card" th:if="${estado.prestamoActivo == null}">
+        <h3 style="margin-bottom: 10px; font-size: 16px;">Préstamo</h3>
+        <span class="badge badge-success">Sin préstamos activos</span>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-bottom: 15px; font-size: 16px;">Últimos Movimientos</h3>
+        <table>
+            <tbody>
+                <tr th:each="mov : ${estado.ultimosMovimientos}">
+                    <td th:text="${mov.fecha}">01/11/2026</td>
+                    <td th:text="${mov.tipo}">DEPÓSITO</td>
+                    <td style="text-align: right; font-weight: 500;" th:text="'$' + ${#numbers.formatDecimal(mov.monto, 1, 2)}">$0.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        Actualizado: <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}">11/06/2026 02:30</span>
+    </div>
+</body>
+</html>

@@ -35,4 +35,6 @@ public interface MovimientoAhorroRepository extends JpaRepository<MovimientoAhor
 
     @Query("SELECT s.saldoAhorros FROM Socio s WHERE s.id = :socioId")
     BigDecimal getSaldoActualPorSocio(@Param("socioId") Long socioId);
+    List<MovimientoAhorro> findTop5BySocioOrderByFechaDesc(Socio socio);
+
 }
