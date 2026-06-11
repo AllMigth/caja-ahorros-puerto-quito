@@ -8,6 +8,7 @@ import java.util.List;
 public class EstadoSocioDTO {
     private String nombreCompleto;
     private String cedula;
+    private String telefono;
     private BigDecimal saldoAhorros;
     private PrestamoActivoDTO prestamoActivo;
     private List<MovimientoDTO> ultimosMovimientos;
@@ -21,6 +22,7 @@ public class EstadoSocioDTO {
         private BigDecimal valorCuotaActual;
         private String fechaProximoPago;
         private String sistemaAmortizacion;
+        private Double tasaInteresMensual;
     }
     
     @Data

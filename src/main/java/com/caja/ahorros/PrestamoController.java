@@ -81,7 +81,7 @@ public Prestamo aprobarPrestamo(@PathVariable Long id, @RequestBody AprobarPrest
             "Monto mínimo a aprobar: $" + montoMinimo);
     }
     
-    Integer prestamosActivos = prestamoRepository.countPrestamosActivosPorSocio(prestamo.getSocio().getId());
+    Long prestamosActivos = prestamoRepository.countPrestamosActivosPorSocio(prestamo.getSocio().getId());
     if (prestamosActivos > 0) {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, 
             "El socio ya tiene un préstamo activo. Debe liquidarlo antes de solicitar otro.");

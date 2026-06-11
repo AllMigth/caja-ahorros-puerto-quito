@@ -55,7 +55,7 @@ public class ReporteController {
                 .sumSaldoPendientePorSocio(socio.getId());
                 
             Integer prestamosActivos = prestamoRepository
-                .countPrestamosActivosPorSocio(socio.getId());
+            .countPrestamosActivosPorSocio(socio.getId()).intValue();
             
             dto.setTotalAhorrado(totalAhorrado);
             dto.setTotalPagadoPrestamos(totalPagado);
@@ -95,8 +95,7 @@ public class ReporteController {
             BigDecimal saldoPendiente = prestamoRepository
                 .sumSaldoPendientePorSocio(socio.getId());
                 
-            Integer prestamosActivos = prestamoRepository
-                .countPrestamosActivosPorSocio(socio.getId());
+            Integer prestamosActivos = prestamoRepository.countPrestamosActivosPorSocio(socio.getId()).intValue();
             
             dto.setTotalAhorrado(saldoActual);
             dto.setTotalPagadoPrestamos(pagosDelMes);

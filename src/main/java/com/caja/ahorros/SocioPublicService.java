@@ -26,9 +26,10 @@ public class SocioPublicService {
         EstadoSocioDTO dto = new EstadoSocioDTO();
         dto.setNombreCompleto(socio.getNombres() + " " + socio.getApellidos());
         dto.setCedula(socio.getCedula());
-        dto.setSaldoAhorros(socio.getSaldoAhorros());
+        dto.setTelefono(socio.getTelefono());
+        dto.setSaldoAhorros(socio.getSaldoAhorros() != null ? socio.getSaldoAhorros() : BigDecimal.ZERO);
         
-        // Busca préstamo activo: APROBADO
+        // Préstamo activo: APROBADO
         prestamoRepository.findBySocioAndEstado(socio, Prestamo.EstadoPrestamo.APROBADO)
             .ifPresent(prestamo -> {
                 EstadoSocioDTO.PrestamoActivoDTO p = new EstadoSocioDTO.PrestamoActivoDTO();
@@ -36,14 +37,13 @@ public class SocioPublicService {
                 p.setSaldoPendiente(prestamo.getSaldoPendiente());
                 p.setCuotasTotales(prestamo.getPlazoMeses());
                 p.setSistemaAmortizacion(prestamo.getSistemaAmortizacion().toString());
+                p.setTasaInteresMensual(prestamo.getTasaInteresMensual());
                 
-                // Cuotas pagadas
                 long pagadas = prestamo.getCuotas().stream()
                     .filter(c -> c.getEstado() == CuotaPrestamo.EstadoCuota.PAGADA)
                     .count();
                 p.setCuotasPagadas((int) pagadas);
                 
-                // Próxima cuota pendiente
                 prestamo.getCuotas().stream()
                     .filter(c -> c.getEstado() == CuotaPrestamo.EstadoCuota.PENDIENTE)
                     .findFirst()
@@ -56,14 +56,14 @@ public class SocioPublicService {
                 dto.setPrestamoActivo(p);
             });
         
-        // Últimos 5 movimientos
+        // Últimos 5 movimientos - Ajustado a LocalDateTime y enum TipoMovimiento
         List<EstadoSocioDTO.MovimientoDTO> movs = movimientoRepository
             .findTop5BySocioOrderByFechaDesc(socio)
             .stream()
             .map(m -> {
                 EstadoSocioDTO.MovimientoDTO mov = new EstadoSocioDTO.MovimientoDTO();
-                mov.setFecha(m.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-                mov.setTipo(m.getTipo().toString());
+                mov.setFecha(m.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+                mov.setTipo(m.getTipo().toString()); // Convierte enum a String
                 mov.setMonto(m.getMonto());
                 return mov;
             })
